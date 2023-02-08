@@ -1,0 +1,48 @@
+@SpringBootApplication
+@RestController
+public class VendasApplication {
+
+  @Bean
+  public CommandLineRunner init(@Autowired Clientes clientesRepository){
+    return args -> {
+      System.out.println("Salvando Cliente");
+      Cliente cliente = new Cliente("Dennis");
+      clientesRepository.save(cliente);
+
+      clientesRepository.save(new Cliente("Junior"));
+
+      List<Cliente> todosClientes =clientesRepository.findAll();
+      todosClientes.forEach(System.out::println);
+
+      System.out.println("Atualizando Cliente");
+      todosClientes.forEach(c -> {
+        c.setNome(c.getNome() + " atualizado");
+        clientesRepository.save(c);
+      });
+
+      todosClientes =clientesRepository.findAll();
+      todosClientes.forEach(System.out::println);
+
+
+      System.out.println("Buscando Cliente");
+      clientesRepository.findByNomeContaining("Ju").forEach(System.out::println);
+
+      System.out.println("Deletando clientesRepository");
+      clientesRepository.findAll().forEach(c-> {
+        clientesRepository.delete(c);
+      });
+
+      todosClientes =clientesRepository.findAll();
+      if(todosClientes.isEmpty()){
+        System.out.println("Nenhum cliente encontrado");
+      } else {
+        todosClientes.forEach(System.out::println);
+      }
+
+    };
+  }
+
+  public static void main(String[] args) {
+    SpringApplication.run(VendasApplication.class, args);
+  }
+}

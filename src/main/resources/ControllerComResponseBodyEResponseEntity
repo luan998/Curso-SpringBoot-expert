@@ -1,0 +1,76 @@
+
+@Controller
+public class ClienteController {
+
+  @Autowired
+  private ClientesRepository clientesRepository;
+
+  @RequestMapping(
+      value = {"/clientes/hello/{nome}", "/clientes/hello"},
+      method = RequestMethod.GET)
+  @ResponseBody
+  public String helloClientes(@PathVariable("nome") String nomeCliente) {
+    return String.format("Hello %s", nomeCliente);
+  }
+
+  @GetMapping("/clientes/{id}")
+  @ResponseBody
+  public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
+    Optional<Cliente> cliente = clientesRepository.findById(id);
+    if (cliente.isPresent()) {
+
+      //Equivalente ao ResponseEntity<Cliente> responseEntity = new ResponseEntity<>(cliente.get(), HttpStatus.OK);
+      //Também pode passar headers no response entity
+      return ResponseEntity.ok(cliente.get());
+    }
+    return ResponseEntity.notFound().build();
+  }
+
+  @PostMapping("/clientes")
+  @ResponseBody
+  public ResponseEntity saveCliente(@RequestBody Cliente cliente) {
+    Cliente c = clientesRepository.save(cliente);
+    return ResponseEntity.ok(c);
+  }
+
+  @DeleteMapping("/clientes/{id}")
+  @ResponseBody
+  public ResponseEntity delete(@PathVariable Integer id) {
+    Optional<Cliente> cliente = clientesRepository.findById(id);
+
+    if (cliente.isPresent()) {
+      clientesRepository.delete(cliente.get());
+      return ResponseEntity.noContent().build();
+    }
+
+    return ResponseEntity.notFound().build();
+  }
+
+  @PutMapping("/clientes/{id}")
+  @ResponseBody
+  public ResponseEntity update(@PathVariable Integer id,
+      @RequestBody Cliente cliente) {
+    return clientesRepository
+        .findById(id)
+        .map(c -> {
+          cliente.setId(c.getId());
+          clientesRepository.save(cliente);
+          return ResponseEntity.noContent().build();
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  @GetMapping("/clientes")
+  @ResponseBody
+  public ResponseEntity find(Cliente filter) {
+    //Objeto que permite configurar para encontrar os clientes através das propriedades
+    ExampleMatcher matcher = ExampleMatcher
+        .matching()
+        .withIgnoreCase()
+        .withStringMatcher(StringMatcher.CONTAINING);
+    //Pega as propriedades populadas e cria um exemplo
+    Example example = Example.of(filter, matcher);
+
+    List<Cliente> list = clientesRepository.findAll(example);
+    return ResponseEntity.ok(list);
+  }
+}

@@ -1,0 +1,23 @@
+@Service
+public class UsuarioServiceImpl implements UserDetailsService {
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private UsuarioRepository usuarioRepository;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    if(!username.equals("fulano")) {
+      throw new UsernameNotFoundException("Usuário não encontrado na base.");
+    }
+
+    return User
+        .builder()
+        .password(passwordEncoder.encode("123"))
+        .username("fulano")
+        .roles("USER", "ADMIN")
+        .build();
+  }
+}
