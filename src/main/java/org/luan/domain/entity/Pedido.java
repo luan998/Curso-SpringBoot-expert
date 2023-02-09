@@ -27,7 +27,7 @@ import org.luan.domain.enums.StatusPedido;
 public class Pedido {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "ID")
   private Integer id;
 
