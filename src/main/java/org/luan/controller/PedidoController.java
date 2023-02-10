@@ -1,5 +1,6 @@
 package org.luan.controller;
 
+import io.swagger.annotations.Api;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/pedidos")
+@Api("Api Pedidos")
 public class PedidoController {
 
   @Autowired

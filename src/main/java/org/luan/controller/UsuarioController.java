@@ -1,5 +1,6 @@
 package org.luan.controller;
 
+import io.swagger.annotations.Api;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.luan.domain.dto.CredentialsDto;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
+@Api("Api Usuários")
 public class UsuarioController {
 
   private final UsuarioServiceImpl usuarioService;

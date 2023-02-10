@@ -1,5 +1,9 @@
 package org.luan.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
 import org.luan.domain.entity.Produto;
@@ -22,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/produtos")
+@Api("Api Produtos")
 public class ProdutoController {
 
   @Autowired

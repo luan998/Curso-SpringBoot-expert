@@ -1,5 +1,9 @@
 package org.luan.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
 import org.luan.domain.entity.Cliente;
@@ -23,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/clientes")
+@Api("Api Clientes")
 public class ClienteController {
 
   @Autowired
@@ -36,6 +41,11 @@ public class ClienteController {
   }
 
   @GetMapping("/{id}")
+  @ApiOperation("Obter detalhes de um cliente")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "Cliente encontrado"),
+      @ApiResponse(code = 404, message = "Cliente não encontrado para o ID informado"),
+  })
   public Cliente getClienteById(@PathVariable Integer id) {
     return clientesRepository
         .findById(id)
@@ -43,6 +53,11 @@ public class ClienteController {
   }
 
   @PostMapping
+  @ApiOperation("Salvar um novo cliente")
+  @ApiResponses({
+      @ApiResponse(code = 201, message = "Cliente encontrado"),
+      @ApiResponse(code = 400, message = "Erro de validação"),
+  })
   @ResponseStatus(HttpStatus.CREATED)
   public Cliente saveCliente(@RequestBody @Valid Cliente cliente) {
     return clientesRepository.save(cliente);
@@ -50,6 +65,11 @@ public class ClienteController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ApiOperation("Deletar um cliente")
+  @ApiResponses({
+      @ApiResponse(code = 204, message = "Cliente Deletado"),
+      @ApiResponse(code = 400, message = "Erro ao deletar cliente"),
+  })
   public void delete(@PathVariable Integer id) {
     clientesRepository.findById(id)
         .map(cliente -> {
@@ -61,6 +81,11 @@ public class ClienteController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ApiOperation("Atualizar um cliente")
+  @ApiResponses({
+      @ApiResponse(code = 204, message = "Cliente Atualizado"),
+      @ApiResponse(code = 400, message = "Erro ao atualizar cliente"),
+  })
   public Cliente update(@PathVariable Integer id,
       @RequestBody @Valid Cliente cliente) {
     return clientesRepository
@@ -74,6 +99,11 @@ public class ClienteController {
   }
 
   @GetMapping
+  @ApiOperation("Obter detalhes de um cliente")
+  @ApiResponses({
+      @ApiResponse(code = 200, message = "Cliente encontrado"),
+      @ApiResponse(code = 404, message = "Cliente não encontrado para o parâmetro informado"),
+  })
   public List<Cliente> find(Cliente filter) {
     //Objeto que permite configurar para encontrar os clientes através das propriedades
     ExampleMatcher matcher = ExampleMatcher
